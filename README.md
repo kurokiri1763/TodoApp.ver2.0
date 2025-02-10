@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # TypeScript + React + Vite で作るTodoアプリ
 =======
 # React + TypeScript + Vite
