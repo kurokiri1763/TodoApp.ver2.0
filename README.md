@@ -1,6 +1,5 @@
 <<<<<<< HEAD
-# TodoApp.ver2.0
-TypeScript + React + Vite で作るTodoアプリ
+# TypeScript + React + Vite で作るTodoアプリ
 =======
 # React + TypeScript + Vite
 
