@@ -16,6 +16,7 @@ export const App = () => {
   const [text,setText] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter,setFilter] = useState<Filter>('all');
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
   }
@@ -34,6 +35,24 @@ export const App = () => {
 
     setTodos((todos) => [newTodo, ...todos]);
     setText('');
+    };
+
+    const handleTodo = <K extends keyof Todo, V extends Todo[K]>(
+      id: number,
+      key: K,
+      value: V,
+    ) => {
+      setTodos((todos) => {
+        const newTodos = todos.map((todo) => {
+          if (todo.id === id) {
+            return {...todo, [key]: value };
+          }
+          else {
+            return todo;
+          }
+        });
+        return newTodos
+      });
     };
 
     // Todo編集処理
@@ -94,7 +113,10 @@ export const App = () => {
         return todo;
     }
   });
-      
+
+  const handleEmpty = () => {
+    setTodos((todos) => todos.filter((todo) => !todo.removed));
+  };  
 
   return (
     <div>
@@ -104,22 +126,27 @@ export const App = () => {
         <option value="uncheked">現在のタスク</option>
         <option value="removed">ゴミ箱</option> 
       </select>
-      <form onSubmit= {(e) => {
-          e.preventDefault(); handleSubmit();
-        }}
+
+      {filter === 'removed' ? (
+        <button onClick= {handleEmpty} disabled={todos.filter((todo) => todo.removed).length === 0}>ゴミ箱を空にする</button>
+      ) : (
+        filter !== 'checked' && (
+          <form onSubmit={(e) => {e.preventDefault();handleSubmit();
+          }}
       >
-        <input type = "text" value={text} disabled={filter === 'checked' || filter === 'removed'} onChange={(e) => handleChange(e)} />
-        <input type = "submit" value="追加" disabled={filter === 'checked' || filter === 'removed'} onSubmit={handleSubmit}/>
+        <input type = "text" value={text} onChange={(e) => handleChange(e)} />
+        <input type = "submit" value="追加" onSubmit={handleSubmit}/>
       </form>
-        <p>{text}</p>
+        )
+      )}
 
       <ul>
         {filterTodos.map((todo) => {
           return (
           <li key={todo.id}>
-            <input type="checkbox" disabled={todo.removed} checked={todo.checked} onChange={() => handleCheck(todo.id, !todo.checked)}/>
-            <input type="text" disabled={todo.checked || todo.removed} value={todo.value} onChange={(e) =>handleEdit(todo.id, e.target.value)}/>
-            <button onClick={() => handleRemove(todo.id, !todo.removed)}>{todo.removed ? '復元' : '削除'}</button> 
+            <input type="checkbox" disabled={todo.removed} checked={todo.checked} onChange={() => handleTodo(todo.id, 'checked', !todo.checked)}/>
+            <input type="text" disabled={todo.checked || todo.removed} value={todo.value} onChange={(e) =>handleTodo(todo.id, 'value', e.target.value)}/>
+            <button onClick={() => handleTodo(todo.id, 'removed', !todo.removed)}>{todo.removed ? '復元' : '削除'}</button> 
           </li>
           );
         })}
