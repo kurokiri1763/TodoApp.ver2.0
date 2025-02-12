@@ -37,6 +37,7 @@ export const App = () => {
     setText('');
     };
 
+    
     const handleTodo = <K extends keyof Todo, V extends Todo[K]>(
       id: number,
       key: K,
@@ -54,45 +55,6 @@ export const App = () => {
         return newTodos
       });
     };
-
-    // Todo編集処理
-  const handleEdit = (id: number, value: string) => {
-    setTodos((todos) => {
-      const newTodos = todos.map((todo) => {
-      if (todo.id === id) {
-        return {...todo, value};
-      }
-      return todo;
-    });
-      return newTodos;
-    });
-  };
-
-    // Todo削除処理
-    const handleRemove = (id: number, removed: boolean) => {
-      setTodos((todos) => {
-        const newTodos= todos.map((todo) => {
-          if (todo.id === id) {
-            return {...todo, removed };
-          }
-          return todo;
-        });
-        return newTodos;
-      });
-    };
-
-  // チェックボックスのチェック処理
-  const handleCheck = (id: number, checked: boolean) => {
-    setTodos((todos) => {
-      const newTodos = todos.map((todo) => {
-        if (todo.id === id) {
-          return {...todo, checked };  
-        }
-        return todo;
-      });
-      return newTodos;
-    });
-  };
 
   // フィルター処理
   const handleFilter = (filter: Filter) => {
