@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect,useState } from 'react';
+import localforage from 'localforage';
 
 // Todo型を定義
 type Todo = {
@@ -79,6 +80,23 @@ export const App = () => {
   const handleEmpty = () => {
     setTodos((todos) => todos.filter((todo) => !todo.removed));
   };  
+
+    /**
+   * キー名 'todo-20200101' のデータを取得
+   * 第 2 引数の配列が空なのでコンポーネントのマウント時のみに実行される
+  */
+    useEffect(() => {
+      localforage
+        .getItem('todo-20200101')
+        .then((values) => setTodos(values as Todo[]));
+    }, []);
+  
+    /**
+     * todos ステートが更新されたら、その値を保存
+    */
+    useEffect(() => {
+      localforage.setItem('todo-20200101', todos);
+    }, [todos]);
 
   return (
     <div>
