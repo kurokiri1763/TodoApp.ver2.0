@@ -1,16 +1,6 @@
-import { useEffect,useState } from 'react';
 import localforage from 'localforage';
-
-// Todo型を定義
-type Todo = {
-  value: string;
-  readonly id: number;
-  checked: boolean;
-  removed: boolean;
-};
-
-// Filter型定義
-type Filter = 'all' | 'checked' | 'unchecked' | 'removed';
+import { useEffect,useState } from 'react';
+import { isTodos } from './lib/isTodos';
 
 export const App = () => {
 
@@ -38,7 +28,6 @@ export const App = () => {
     setText('');
     };
 
-    
     const handleTodo = <K extends keyof Todo, V extends Todo[K]>(
       id: number,
       key: K,
@@ -88,7 +77,7 @@ export const App = () => {
     useEffect(() => {
       localforage
         .getItem('todo-20200101')
-        .then((values) => setTodos(values as Todo[]));
+        .then((values) => isTodos(values) && setTodos(values as Todo[]));
     }, []);
   
     /**
