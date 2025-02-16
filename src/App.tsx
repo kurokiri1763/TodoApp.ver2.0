@@ -1,9 +1,13 @@
 import localforage from 'localforage';
 import { useEffect,useState } from 'react';
 import { isTodos } from './lib/isTodos';
+import { FormDialog } from './FormDialog';
+import { ActionButton } from './ActionButton';
+import { SideBar } from './SideBar';
+import { TodoItem } from './TodoItem';
+
 
 export const App = () => {
-
   const [text,setText] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter,setFilter] = useState<Filter>('all');
@@ -15,7 +19,7 @@ export const App = () => {
   // Todo作成処理
   const handleSubmit = () => {
     if (!text) return;
-    // 新しいToDoを作成
+
     // Todo型に限定
     const newTodo: Todo = {
       value : text,
@@ -51,21 +55,6 @@ export const App = () => {
     setFilter(filter);
   };
 
-  const filterTodos = todos.filter((todo) => {
-    switch (filter) {
-      case 'all':
-        return !todo.removed;
-      case 'checked':
-        return todo.checked && !todo.removed;
-      case 'unchecked':
-        return !todo.checked && !todo.removed
-      case 'removed':
-        return todo.removed;
-      default:
-        return todo;
-    }
-  });
-
   const handleEmpty = () => {
     setTodos((todos) => todos.filter((todo) => !todo.removed));
   };  
@@ -89,37 +78,10 @@ export const App = () => {
 
   return (
     <div>
-      <select defaultValue="all" onChange={(e) => handleFilter(e.target.value as Filter)}>
-        <option value="all">全てのタスク</option>
-        <option value="checked">完了したタスク</option>
-        <option value="uncheked">現在のタスク</option>
-        <option value="removed">ゴミ箱</option> 
-      </select>
-
-      {filter === 'removed' ? (
-        <button onClick= {handleEmpty} disabled={todos.filter((todo) => todo.removed).length === 0}>ゴミ箱を空にする</button>
-      ) : (
-        filter !== 'checked' && (
-          <form onSubmit={(e) => {e.preventDefault();handleSubmit();
-          }}
-      >
-        <input type = "text" value={text} onChange={(e) => handleChange(e)} />
-        <input type = "submit" value="追加" onSubmit={handleSubmit}/>
-      </form>
-        )
-      )}
-
-      <ul>
-        {filterTodos.map((todo) => {
-          return (
-          <li key={todo.id}>
-            <input type="checkbox" disabled={todo.removed} checked={todo.checked} onChange={() => handleTodo(todo.id, 'checked', !todo.checked)}/>
-            <input type="text" disabled={todo.checked || todo.removed} value={todo.value} onChange={(e) =>handleTodo(todo.id, 'value', e.target.value)}/>
-            <button onClick={() => handleTodo(todo.id, 'removed', !todo.removed)}>{todo.removed ? '復元' : '削除'}</button> 
-          </li>
-          );
-        })}
-      </ul>
+      <SideBar onFilter={handleFilter} />
+      <FormDialog text={text} onChange={handleChange} onSubmit={handleSubmit} />
+      <TodoItem todos={todos} filter={filter} onTodo={handleTodo} />
+      <ActionButton todos={todos} onEmpty={handleEmpty} />
     </div>
   );
 };
