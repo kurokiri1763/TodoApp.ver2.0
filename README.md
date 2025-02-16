@@ -51,3 +51,5 @@ export default tseslint.config({
 })
 ```
 >>>>>>> e7dbd8a (first commit)
+
+ちななんて書いてあるかわからん
