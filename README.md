@@ -1,6 +1,4 @@
-# TypeScript + React + Vite で作るTodoアプリ
-=======
-# React + TypeScript + Vite
+# React + TypeScript + Vite　で作るTodoアプリ
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
