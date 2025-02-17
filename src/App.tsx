@@ -1,4 +1,8 @@
 import localforage from 'localforage';
+import GlobalStyles from '@mui/material/GlobalStyles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { indigo, pink } from '@mui/material/colors';
+import { ToolBar } from './ToolBar';
 import { useEffect,useState } from 'react';
 import { isTodos } from './lib/isTodos';
 import { FormDialog } from './FormDialog';
@@ -6,11 +10,30 @@ import { ActionButton } from './ActionButton';
 import { SideBar } from './SideBar';
 import { TodoItem } from './TodoItem';
 
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: indigo[500],
+      light: '757de8',
+      dark: '#002984',
+    },
+    secondary: {
+      main: pink[500],
+      light: '#ff6090',
+      dark: '#b0003a',
+    },
+  },
+});
 
 export const App = () => {
   const [text,setText] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter,setFilter] = useState<Filter>('all');
+
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const handleToggleDrawer = () => {
+    setDrawerOpen((drawerOpen) => !drawerOpen);
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
@@ -77,11 +100,13 @@ export const App = () => {
     }, [todos]);
 
   return (
-    <div>
+    <ThemeProvider theme={theme}>
+      <GlobalStyles styles={{ body: {margin :0, padding: 0 } }} />
+      <ToolBar filter={filter} />
       <SideBar onFilter={handleFilter} />
       <FormDialog text={text} onChange={handleChange} onSubmit={handleSubmit} />
       <TodoItem todos={todos} filter={filter} onTodo={handleTodo} />
       <ActionButton todos={todos} onEmpty={handleEmpty} />
-    </div>
+    </ThemeProvider>
   );
 };
