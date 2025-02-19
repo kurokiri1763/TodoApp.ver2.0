@@ -15,6 +15,7 @@ import { Divider } from "@mui/material";
 
 type Props = {
     drawerOpen: boolean;
+    onToggleQR: () => void;
     onToggleDrawer: () => void;
     onFilter: (filter: Filter) => void;
 };
@@ -87,7 +88,18 @@ export const SideBar = (props: Props) => (
                             <ListItemText secondary="ゴミ箱" />
                     </ListItemButton>
                 </ListItem>
+                
                 <Divider />
+
+                <ListItem disablePadding>
+                    <ListItemButton aria-label="list-share" onClick={props.onToggleQR}>
+                        <ListItemIcon>
+                            <Icon>share</Icon>
+                        </ListItemIcon>
+                            <ListItemText secondary="このアプリを共有" />
+                    </ListItemButton>
+                </ListItem>
+
             </List>
         </DrawerList>
     </Drawer>

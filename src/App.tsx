@@ -9,6 +9,8 @@ import { FormDialog } from './FormDialog';
 import { ActionButton } from './ActionButton';
 import { SideBar } from './SideBar';
 import { TodoItem } from './TodoItem';
+import { QR } from './QR';
+
 
 const theme = createTheme({
   palette: {
@@ -25,10 +27,16 @@ const theme = createTheme({
   },
 });
 
+
 export const App = () => {
   const [text,setText] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter,setFilter] = useState<Filter>('all');
+
+  const [qrOpen, setQrOpen] = useState(false);
+  const handleToggleQR = () => {
+    setQrOpen((qrOpen) => !qrOpen);
+  };
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const handleToggleDrawer = () => {
@@ -71,7 +79,6 @@ export const App = () => {
       });
     };
 
-  // フィルター処理
   const handleFilter = (filter: Filter) => {
     setFilter(filter);
   };
@@ -80,19 +87,12 @@ export const App = () => {
     setTodos((todos) => todos.filter((todo) => !todo.removed));
   };  
 
-    /**
-   * キー名 'todo-20200101' のデータを取得
-   * 第 2 引数の配列が空なのでコンポーネントのマウント時のみに実行される
-  */
     useEffect(() => {
       localforage
         .getItem('todo-20200101')
         .then((values) => isTodos(values) && setTodos(values as Todo[]));
     }, []);
   
-    /**
-     * todos ステートが更新されたら、その値を保存
-    */
     useEffect(() => {
       localforage.setItem('todo-20200101', todos);
     }, [todos]);
@@ -101,7 +101,8 @@ export const App = () => {
     <ThemeProvider theme={theme}>
       <GlobalStyles styles={{ body: {margin :0, padding: 0 } }} />
       <ToolBar filter={filter} onToggleDrawer={handleToggleDrawer}/>
-      <SideBar drawerOpen={drawerOpen} onToggleDrawer={handleToggleDrawer} onFilter={handleFilter} />
+      <SideBar drawerOpen={drawerOpen} onFilter={handleFilter} onToggleQR={handleToggleQR} onToggleDrawer={handleToggleDrawer} />
+      <QR open={qrOpen} onClose={handleToggleQR} />
       <FormDialog text={text} onChange={handleChange} onSubmit={handleSubmit} />
       <TodoItem todos={todos} filter={filter} onTodo={handleTodo} />
       <ActionButton todos={todos} onEmpty={handleEmpty} />
