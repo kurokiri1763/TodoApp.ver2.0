@@ -6,10 +6,11 @@ import { ToolBar } from './ToolBar';
 import { useEffect,useState } from 'react';
 import { isTodos } from './lib/isTodos';
 import { FormDialog } from './FormDialog';
-import { ActionButton } from './ActionButton';
 import { SideBar } from './SideBar';
 import { TodoItem } from './TodoItem';
 import { QR } from './QR';
+import { AlertDialog } from './AlertDialog';
+import { ActionButton } from './ActionButton';
 
 
 const theme = createTheme({
@@ -33,22 +34,33 @@ export const App = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter,setFilter] = useState<Filter>('all');
 
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
   const [qrOpen, setQrOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const handleToggleDialog = () => {
+    setDialogOpen((dialogOpen) => !dialogOpen);
+  };
+  const handleToggleAlert = () => {
+    setAlertOpen((alertOpen) => !alertOpen);
+  };
   const handleToggleQR = () => {
     setQrOpen((qrOpen) => !qrOpen);
   };
-
-  const [drawerOpen, setDrawerOpen] = useState(false);
   const handleToggleDrawer = () => {
     setDrawerOpen((drawerOpen) => !drawerOpen);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setText(e.target.value);
-  }
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> 
+  ) => { setText(e.target.value); };
 
   const handleSubmit = () => {
-    if (!text) return;
+    if (!text) {
+      setDialogOpen((dialogOpen) => !dialogOpen);
+      return;
+    }
 
     const newTodo: Todo = {
       value : text,
@@ -59,6 +71,7 @@ export const App = () => {
 
     setTodos((todos) => [newTodo, ...todos]);
     setText('');
+    setDialogOpen((dialogOpen) => !dialogOpen);
     };
 
     const handleTodo = <K extends keyof Todo, V extends Todo[K]>(
@@ -99,13 +112,57 @@ export const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <GlobalStyles styles={{ body: {margin :0, padding: 0 } }} />
-      <ToolBar filter={filter} onToggleDrawer={handleToggleDrawer}/>
-      <SideBar drawerOpen={drawerOpen} onFilter={handleFilter} onToggleQR={handleToggleQR} onToggleDrawer={handleToggleDrawer} />
-      <QR open={qrOpen} onClose={handleToggleQR} />
-      <FormDialog text={text} onChange={handleChange} onSubmit={handleSubmit} />
-      <TodoItem todos={todos} filter={filter} onTodo={handleTodo} />
-      <ActionButton todos={todos} onEmpty={handleEmpty} />
+
+      <GlobalStyles 
+      styles={{ body: {margin :0, padding: 0 } }} 
+      />
+
+      <ToolBar 
+      filter={filter} 
+      onToggleDrawer={handleToggleDrawer}
+      />
+
+      <SideBar 
+      drawerOpen={drawerOpen} 
+      onFilter={handleFilter} 
+      onToggleQR={handleToggleQR} 
+      onToggleDrawer={handleToggleDrawer} 
+      />
+
+      <QR 
+      open={qrOpen} 
+      onClose={handleToggleQR} 
+      />
+
+      <FormDialog 
+      text={text} 
+      dialogOpen={dialogOpen}
+      onChange={handleChange} 
+      onSubmit={handleSubmit} 
+      onToggleDialog={handleToggleDialog}
+      />
+
+      <AlertDialog 
+      alertOpen={alertOpen} 
+      onEmpty={handleEmpty} 
+      onToggleAlert={handleToggleAlert} 
+      />
+
+      <TodoItem 
+      todos={todos} 
+      filter={filter} 
+      onTodo={handleTodo} 
+      />
+
+      <ActionButton
+        todos={todos}
+        filter={filter}
+        alertOpen={alertOpen}
+        dialogOpen={dialogOpen}
+        onToggleAlert={handleToggleAlert}
+        onToggleDialog={handleToggleDialog} 
+        />
+
     </ThemeProvider>
   );
 };
