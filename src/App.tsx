@@ -12,7 +12,6 @@ import { QR } from './QR';
 import { AlertDialog } from './AlertDialog';
 import { ActionButton } from './ActionButton';
 
-
 const theme = createTheme({
   palette: {
     primary: {
@@ -98,7 +97,7 @@ export const App = () => {
 
   const handleEmpty = () => {
     setTodos((todos) => todos.filter((todo) => !todo.removed));
-  };  
+  };
 
     useEffect(() => {
       localforage
