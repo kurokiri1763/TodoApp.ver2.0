@@ -1,5 +1,9 @@
 import localforage from 'localforage';
 import GlobalStyles from '@mui/material/GlobalStyles';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from "@fullcalendar/daygrid";
+import allLocales from '@fullcalendar/core/locales-all';
+
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { indigo, pink } from '@mui/material/colors';
 import { ToolBar } from './ToolBar';
@@ -162,6 +166,14 @@ export const App = () => {
         onToggleDialog={handleToggleDialog} 
         />
 
+        <FullCalendar 
+        plugins={[dayGridPlugin]} 
+        initialView="dayGridMonth"
+        locales={allLocales}
+        locale="ja"
+        />
+
     </ThemeProvider>
+    
   );
 };
