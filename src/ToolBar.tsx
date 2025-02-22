@@ -34,7 +34,7 @@ export const ToolBar = (props: Props) => (
                     size="large"
                     edge="start"
                     color="inherit"
-                    sx={{ mr: 2}}
+                    sx={{ mr: 2 }}
                     onClick={props.onToggleDrawer}
                 >
                     <Icon>menu</Icon>

@@ -10,7 +10,7 @@ type Props = {
     dialogOpen: boolean;
     onToggleAlert: () => void;
     onToggleDialog: () => void;
-  };
+};
 
 const FabButton = styled(Fab)({
     position: 'fixed',

@@ -4,10 +4,12 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from "@fullcalendar/daygrid";
 import allLocales from '@fullcalendar/core/locales-all';
 
+import { useEffect,useState } from 'react';
+import { useCallback } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { indigo, pink } from '@mui/material/colors';
+import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { ToolBar } from './ToolBar';
-import { useEffect,useState } from 'react';
 import { isTodos } from './lib/isTodos';
 import { FormDialog } from './FormDialog';
 import { SideBar } from './SideBar';
@@ -15,6 +17,7 @@ import { TodoItem } from './TodoItem';
 import { QR } from './QR';
 import { AlertDialog } from './AlertDialog';
 import { ActionButton } from './ActionButton';
+
 
 const theme = createTheme({
   palette: {
@@ -103,6 +106,10 @@ export const App = () => {
     setTodos((todos) => todos.filter((todo) => !todo.removed));
   };
 
+  const handleDateClick = useCallback((arg: DateClickArg) => {
+    alert(arg.dateStr);
+    }, []);
+
     useEffect(() => {
       localforage
         .getItem('todo-20200101')
@@ -167,8 +174,9 @@ export const App = () => {
         />
 
         <FullCalendar 
-        plugins={[dayGridPlugin]} 
+        plugins={[dayGridPlugin, interactionPlugin]} 
         initialView="dayGridMonth"
+        dateClick={handleDateClick}
         locales={allLocales}
         locale="ja"
         />
