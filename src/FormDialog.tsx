@@ -5,9 +5,11 @@ import DialogActions from '@mui/material/DialogActions';
 
 type Props = {
     text: string;
+    date: string;
     dialogOpen: boolean;
     onSubmit: () => void;
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    onDateChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     onToggleDialog: () => void;
 };
 
@@ -32,6 +34,25 @@ export const FormDialog = (props: Props) => (
                 value={props.text}
                 autoFocus
                 />
+
+                <TextField
+                aria-label='date-input'
+                variant='standard'
+                type='date'
+                style={{
+                    width: '100%',
+                    marginTop: '1rem',
+                    fontSize: '16px',
+                    fontFamily: '-apple-system, BlinkMacSystemFont, Roboto, sans-serif',
+                }}
+                label="日付を選択"
+                onChange={props.onDateChange}
+                value={props.date}
+                InputLabelProps={{
+                    shrink: true,
+                }}
+                />
+
                 <DialogActions>
                     <Button
                     aria-label='form-add'

@@ -3,4 +3,5 @@ declare type Todo = {
     readonly id: number;
     checked: boolean;
     removed: boolean;
+    date: string;
 }

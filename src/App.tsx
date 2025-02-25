@@ -39,6 +39,7 @@ export const App = () => {
   const [text,setText] = useState('');
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter,setFilter] = useState<Filter>('all');
+  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
@@ -76,10 +77,12 @@ export const App = () => {
       id: new Date ().getTime(),
       checked: false,
       removed: false,
+      date: date,
     };
 
     setTodos((todos) => [newTodo, ...todos]);
     setText('');
+    setDate(new Date().toISOString().slice(0, 10));
     setDialogOpen((dialogOpen) => !dialogOpen);
     };
 
@@ -112,6 +115,10 @@ export const App = () => {
   const handleDateClick = useCallback((arg: DateClickArg) => {
     alert(arg.dateStr);
     }, []);
+
+    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setDate(e.target.value);
+    };
 
     useEffect(() => {
       localforage
@@ -151,7 +158,8 @@ export const App = () => {
       text={text} 
       dialogOpen={dialogOpen}
       onChange={handleChange} 
-      onSubmit={handleSubmit} 
+      onSubmit={handleSubmit}
+      onDateChange={handleDateChange}
       onToggleDialog={handleToggleDialog}
       />
 
@@ -182,6 +190,11 @@ export const App = () => {
         dateClick={handleDateClick}
         locales={allLocales}
         locale="ja"
+        events={todos.map(todo => ({
+          id: todo.id,
+          title: todo.value,
+          start: todo.date,
+        }))}
         />
 
     </ThemeProvider>
