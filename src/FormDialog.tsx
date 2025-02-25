@@ -16,10 +16,9 @@ export const FormDialog = (props: Props) => (
         <form
         onSubmit={(e) => {
             e.preventDefault();
-            props.onSubmit();
         }}
         >
-            <div style={{ margin: '1lem' }}>
+            <div style={{ margin: '1rem' }}>
                 <TextField
                 aria-label='todo-input'
                 variant='standard'

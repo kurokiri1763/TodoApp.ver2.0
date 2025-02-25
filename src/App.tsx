@@ -48,12 +48,15 @@ export const App = () => {
   const handleToggleDialog = () => {
     setDialogOpen((dialogOpen) => !dialogOpen);
   };
+
   const handleToggleAlert = () => {
     setAlertOpen((alertOpen) => !alertOpen);
   };
+
   const handleToggleQR = () => {
     setQrOpen((qrOpen) => !qrOpen);
   };
+
   const handleToggleDrawer = () => {
     setDrawerOpen((drawerOpen) => !drawerOpen);
   };
@@ -66,7 +69,7 @@ export const App = () => {
     if (!text) {
       setDialogOpen((dialogOpen) => !dialogOpen);
       return;
-    }
+    };
 
     const newTodo: Todo = {
       value : text,
