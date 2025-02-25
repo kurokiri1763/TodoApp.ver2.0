@@ -7,6 +7,8 @@ type Props = {
     text: string;
     date: string;
     dialogOpen: boolean;
+    selectedDate: string; 
+    isDateSelected: boolean;
     onSubmit: () => void;
     onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
     onDateChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -21,6 +23,11 @@ export const FormDialog = (props: Props) => (
         }}
         >
             <div style={{ margin: '1rem' }}>
+
+            {props.isDateSelected && (
+            <h3 style={{ textAlign: 'center' }}>{props.selectedDate}</h3>
+            )}
+
                 <TextField
                 aria-label='todo-input'
                 variant='standard'
@@ -59,7 +66,7 @@ export const FormDialog = (props: Props) => (
                     color="secondary"
                     onClick={props.onSubmit}
                     >
-                        追加
+                    追加
                     </Button>
                 </DialogActions>
             </div>

@@ -84,6 +84,12 @@ return (
             return (
                 <TodoCard key={todo.id}>
 
+                    <Typography
+                        variant="body2"
+                        sx={{ textAlign: 'right', color: grey[700] }}
+                    >
+                        {todo.date ? `予定日: ${todo.date}` : "予定日: 未設定"}
+                    </Typography>
                     <Form>
                         <TextField
                         aria-label={'todo-${todo.value}'}

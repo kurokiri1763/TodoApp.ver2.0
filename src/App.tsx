@@ -39,6 +39,9 @@ export const App = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [filter,setFilter] = useState<Filter>('all');
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
+  const [isDateSelected, setIsDateSelected] = useState(false); // 日付が選択されたか
+
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
@@ -46,7 +49,12 @@ export const App = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleToggleDialog = () => {
-    setDialogOpen((dialogOpen) => !dialogOpen);
+    setDialogOpen(prev => !prev);
+    setIsDateSelected(false); 
+  
+    if (!isDateSelected) {
+      setDate(""); 
+    }
   };
 
   const handleToggleAlert = () => {
@@ -112,12 +120,18 @@ export const App = () => {
   };
 
   const handleDateClick = useCallback((arg: DateClickArg) => {
-    alert(arg.dateStr);
-    }, []);
+    setDate(arg.dateStr); 
+    setSelectedDate(arg.dateStr);
+    setIsDateSelected(true);
+    setDialogOpen(true);  
+  }, []);
+  
 
-    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setDate(e.target.value);
-    };
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDate(e.target.value);       // `date` を更新
+    setSelectedDate(e.target.value); // `selectedDate` も更新してダイアログのタイトルを変更
+  };
+  
 
     useEffect(() => {
       localforage.getItem<Todo[]>('todo-list').then((savedTodos) => {
@@ -155,9 +169,12 @@ export const App = () => {
       onClose={handleToggleQR} 
       />
 
-      <FormDialog 
-      text={text} 
+      <FormDialog
+      text={text}
+      date={date}
+      isDateSelected={isDateSelected}
       dialogOpen={dialogOpen}
+      selectedDate={selectedDate}
       onChange={handleChange} 
       onSubmit={handleSubmit}
       onDateChange={handleDateChange}
