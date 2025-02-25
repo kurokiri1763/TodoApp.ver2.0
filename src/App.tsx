@@ -7,10 +7,9 @@ import allLocales from '@fullcalendar/core/locales-all';
 import { useEffect,useState } from 'react';
 import { useCallback } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { indigo, pink } from '@mui/material/colors';
+import { indigo, lightBlue, pink } from '@mui/material/colors';
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { ToolBar } from './ToolBar';
-import { isTodos } from './lib/isTodos';
 import { FormDialog } from './FormDialog';
 import { SideBar } from './SideBar';
 import { TodoItem } from './TodoItem';
@@ -121,13 +120,15 @@ export const App = () => {
     };
 
     useEffect(() => {
-      localforage
-        .getItem('todo-20200101')
-        .then((values) => isTodos(values) && setTodos(values as Todo[]));
+      localforage.getItem<Todo[]>('todo-list').then((savedTodos) => {
+        if (savedTodos) {
+          setTodos(savedTodos);
+        }
+      });
     }, []);
   
     useEffect(() => {
-      localforage.setItem('todo-20200101', todos);
+      localforage.setItem('todo-list', todos);
     }, [todos]);
 
   return (
@@ -184,19 +185,21 @@ export const App = () => {
         onToggleDialog={handleToggleDialog} 
         />
 
+      {filter !== 'removed' && (
         <FullCalendar 
         plugins={[dayGridPlugin, interactionPlugin]} 
         initialView="dayGridMonth"
         dateClick={handleDateClick}
         locales={allLocales}
         locale="ja"
-        events={todos.map(todo => ({
+        events={todos .filter(todo => !todo.removed).map(todo => ({
           id: todo.id,
           title: todo.value,
           start: todo.date,
+          color: todo.checked ? pink.A200 : lightBlue[500],
         }))}
         />
-
+      )}
     </ThemeProvider>
     
   );
