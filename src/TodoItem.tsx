@@ -18,7 +18,7 @@ type Props = {
 
 const Container = styled('div')({
     margin: '0 auto',
-    maxWidth: '640px',
+    maxWidth: '450px',
     fontFamily: '-apple-system, BlinkMacSystemFont, Roboto, sans-serif',
 });
 

@@ -16,6 +16,7 @@ import { TodoItem } from './TodoItem';
 import { QR } from './QR';
 import { AlertDialog } from './AlertDialog';
 import { ActionButton } from './ActionButton';
+import { styled } from "@mui/material/styles";
 
 
 const theme = createTheme({
@@ -56,7 +57,7 @@ export const App = () => {
       setDate(""); 
     }
   };
-
+  
   const handleToggleAlert = () => {
     setAlertOpen((alertOpen) => !alertOpen);
   };
@@ -126,12 +127,17 @@ export const App = () => {
     setDialogOpen(true);  
   }, []);
   
-
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDate(e.target.value);       // `date` を更新
     setSelectedDate(e.target.value); // `selectedDate` も更新してダイアログのタイトルを変更
   };
   
+  const CalendarContainer = styled("div")({
+    maxWidth: "1000px", 
+    margin: "0 auto",
+    width: "100%",
+    overflow: "hidden",
+  });
 
     useEffect(() => {
       localforage.getItem<Todo[]>('todo-list').then((savedTodos) => {
@@ -202,6 +208,7 @@ export const App = () => {
         onToggleDialog={handleToggleDialog} 
         />
 
+    <CalendarContainer>
       {filter !== 'removed' && (
         <FullCalendar 
         plugins={[dayGridPlugin, interactionPlugin]} 
@@ -209,6 +216,7 @@ export const App = () => {
         dateClick={handleDateClick}
         locales={allLocales}
         locale="ja"
+        height="700px"
         events={todos .filter(todo => !todo.removed).map(todo => ({
           id: todo.id,
           title: todo.value,
@@ -217,6 +225,8 @@ export const App = () => {
         }))}
         />
       )}
+    </CalendarContainer>
+
     </ThemeProvider>
     
   );

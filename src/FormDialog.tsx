@@ -36,7 +36,7 @@ export const FormDialog = (props: Props) => (
                     fontSize: '16px',
                     fontFamily: '-apple-system, BlinkMacSystemFont, Roboto, sans-serif',
                 }}
-                label="タスクを入力"
+                label="新しいタスクを入力"
                 onChange={(e) => props.onChange(e)}
                 value={props.text}
                 autoFocus
