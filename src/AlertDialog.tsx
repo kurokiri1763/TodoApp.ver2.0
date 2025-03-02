@@ -23,7 +23,7 @@ export const AlertDialog = (props: Props) => (
         <DialogTitle>警告</DialogTitle>
         <DialogContent>
             <DialogContentText>本当に削除しますか？</DialogContentText>
-            <DialogContentText>この操作は削除できません。</DialogContentText>
+            <DialogContentText>この操作は取り消せません。</DialogContentText>
         </DialogContent>
 
         <DialogActions>
