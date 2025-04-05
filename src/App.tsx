@@ -41,7 +41,7 @@ export const App = () => {
   const [filter,setFilter] = useState<Filter>('all');
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().slice(0, 10));
-  const [isDateSelected, setIsDateSelected] = useState(false); // 日付が選択されたか
+  const [isDateSelected, setIsDateSelected] = useState(false); 
 
 
   const [dialogOpen, setDialogOpen] = useState(false);
